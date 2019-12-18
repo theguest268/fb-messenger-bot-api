@@ -1,6 +1,6 @@
 {
   "name": "fb-messenger-bot-api",
-  "version": "0.0.0-development",
+  "version": "4.3.2",
   "description": "NodeJS Facebook Messenger API for bots to send messages and setup events to Facebook.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,7 +15,6 @@
     "prebuild": "rimraf ./dist",
     "build": "tsc --declaration",
     "build:watch": "tsc -w",
-    "precommit": "npm t && npm run tslint && npm run build && git add .",
     "commit": "git-cz",
     "tslint": "./node_modules/.bin/tslint -c tslint.json -p tsconfig.json --fix",
     "generate-docs": "./node_modules/.bin/typedoc --out ./docs --module modules --hideGenerator --tsconfig tsconfig.json",
@@ -104,6 +103,11 @@
       "ts-jest": {
         "skipBabel": true
       }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm t && npm run tslint && npm run build && git add ."
     }
   }
 }

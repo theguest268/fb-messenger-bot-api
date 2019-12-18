@@ -33,6 +33,10 @@ export class Utils {
     /* istanbul ignore next line */
   private constructor() {}
 
+  public static setAPIVersion(version: string) {
+    Utils.requestOptions.url = `https://graph.facebook.com/v${version}/`;
+  }
+
   public static getRequestOptions(): RequestOptions {
     return <RequestOptions>JSON.parse(JSON.stringify(Utils.requestOptions));
   }

@@ -35,10 +35,14 @@ export class Client {
     /**
      * @param {string} token - Facebook Page Token
      * @param {ProxyData} proxyData - Proxy information if behind proxy
+     * @param {string} version - Facebook API version
      */
-  public constructor(token: string, proxyData: ProxyData) {
+  public constructor(token: string, proxyData: ProxyData, version?: string) {
     this.requestData = { token };
     this.requestData = Utils.getProxyData(this.requestData, proxyData);
+    if (version) {
+      Utils.setAPIVersion(version);
+    }
   }
 
     /**

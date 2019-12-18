@@ -25,11 +25,15 @@ export class FacebookPageAPIClient {
      * @param pageId
      * @param {string} token - Facebook FacebookPageAPIClient Token
      * @param {ProxyData} proxyData - Proxy information if behind proxy
+     * @param {string} version - Facebook API version
      */
-  public constructor(pageId: string, token: string, proxyData?: ProxyData) {
+  public constructor(pageId: string, token: string, proxyData?: ProxyData, version?: string) {
     this.pageId = pageId;
     this.requestData = { token };
     this.requestData = Utils.getProxyData(this.requestData, proxyData);
+    if (version) {
+      Utils.setAPIVersion(version);
+    }
   }
 
     /**

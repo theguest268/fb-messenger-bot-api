@@ -1,6 +1,6 @@
-# fb-messenger-bot-api
+# fb-messenger-bot-api2
 #### NodeJS Facebook Messenger API
-[![version](https://img.shields.io/npm/v/fb-messenger-bot-api.svg)](http://npm.im/fb-messenger-bot-api)
+[![version](https://img.shields.io/npm/v/fb-messenger-bot-api.svg)](http://npm.im/fb-messenger-bot-api2)
 [![travis build](https://img.shields.io/travis/crisboarna/fb-messenger-bot-api.svg)](https://travis-ci.org/crisboarna/fb-messenger-bot-api)
 [![codecov coverage](https://img.shields.io/codecov/c/github/crisboarna/fb-messenger-bot-api.svg)](https://codecov.io/gh/crisboarna/fb-messenger-bot-api)
 [![dependency status](https://img.shields.io/david/crisboarna/fb-messenger-bot-api.svg)](https://david-dm.org/crisboarna/fb-messenger-bot-api)
@@ -16,7 +16,7 @@
 ## Installation
 
 ```
-npm install fb-messenger-bot-api
+npm install fb-messenger-bot-api2
 ```
 
 ## Table of Contents
@@ -49,7 +49,7 @@ npm install fb-messenger-bot-api
 * [Creating Facebook App](#creating-facebook-app)
 
 ## Documentation
-You can find documentation [here](https://crisboarna.github.io/fb-messenger-bot-api/)
+You can find documentation [here](https://github.com/theguest268/fb-messenger-bot-api2)
 
 ## Features
 * Near complete Typescript types for all incoming/outgoing Facebook Messaging API payloads & webhooks
@@ -67,11 +67,11 @@ You can find documentation [here](https://crisboarna.github.io/fb-messenger-bot-
 
 Import
 ```javascript
-const facebook = require('fb-messenger-bot-api');
+const facebook = require('fb-messenger-bot-api2');
 ```
 or
 ```typescript
-import { FacebookMessagingAPIClient, etc... } from 'fb-messenger-bot-api';
+import { FacebookMessagingAPIClient, etc... } from 'fb-messenger-bot-api2';
 ```
 
 ## Sending Messages
@@ -190,7 +190,7 @@ If none are given defaults to `first_name` only.
 Extracts all relevant & known message types that can be found [here](https://developers.facebook.com/docs/messenger-platform/reference/webhook-events). Returns array with all objects of interest. Left flexibility to user to filter out message types of interest per use case instead of returning dictionary object with each message type as a separate list for optional performance saving in case of usage on time sensitive platforms (AWS Lambda, AF, GCF, etc).
 
 ```typescript
-import {FacebookMessageParser} from 'fb-messenger-bot-api';
+import {FacebookMessageParser} from 'fb-messenger-bot-api2';
 const messages = FacebookMessageParser.parsePayload(incomingPayload);
 ```
 
@@ -201,7 +201,7 @@ const profileClient = new facebook.FacebookProfileAPIClient(process.env.PAGE_ACC
 ```
 or
 ```typescript
-import {Profile} from 'fb-messenger-bot-api';
+import {Profile} from 'fb-messenger-bot-api2';
 const profileClient = new FacebookProfileAPIClient(process.env.PAGE_ACCESS_TOKEN);
 ```
 Using proxy
@@ -247,7 +247,7 @@ const pageClient = new facebook.FacebookPageAPIClient(process.env.PAGE_ID, proce
 ```
 or
 ```typescript
-import {FacebookPageAPIClient} from 'fb-messenger-bot-api';
+import {FacebookPageAPIClient} from 'fb-messenger-bot-api2';
 const pageClient = new FacebookPageAPIClient(process.env.PAGE_ID, process.env.PAGE_ACCESS_TOKEN)
 ```
 Using proxy
@@ -283,7 +283,7 @@ pageClient.postUrl(`<URL>`).postMessage(`<MESSAGE>`).sendPost(`<CALLBACK>`);
 ## Validating Facebook Webhook
 ### Server Validation
 ```javascript
-const facebook = require('fb-messenger-bot-api');
+const facebook = require('fb-messenger-bot-api2');
 const router = require('express').Router();
 router.get('/api/webhook',(req, res) => facebook.ValidateWebhook.validateServer(req,res));
 ```
@@ -309,7 +309,7 @@ router.get('/api/webhook/',validator);
 Alternatively, you can use this when running on AWS Lambda to take advantage of the serverless paradigm as follows:
 
 ```typescript
-import {ValidateWebhook} from 'fb-messenger-bot-api';
+import {ValidateWebhook} from 'fb-messenger-bot-api2';
 const handler = (event, context, callback: Function) => {
     ...
     if(event.httpMethod === 'GET') {
@@ -328,7 +328,7 @@ The Facebook application secret can be provided either as second optional parame
 Compatible with both server/less paradigms as part of single line middleware function to Express or as Lambda first check before callback or remainder or programme.
 
 ```typescript
-import {ValidateWebhook} from 'fb-messenger-bot-api';
+import {ValidateWebhook} from 'fb-messenger-bot-api2';
 const messageIntegrityChecker = (req, res) => {
     const validMessage = ValidateWebhook.validateMessageIntegrity(req.headers["x-hub-signature"]);
     ...
@@ -339,7 +339,7 @@ router.post('/api/webhook/',messageIntegrityChecker);
 ## Complete example
 ```javascript
 const router = require('express').Router();
-const facebook = require('fb-messenger-bot-api');
+const facebook = require('fb-messenger-bot-api2');
 const messagingClient = new facebook.FacebookMessagingAPIClient(process.env.PAGE_ACCESS_TOKEN);
 const messageParser = facebook.FacebookMessageParser;
 ...
@@ -364,7 +364,7 @@ router.post('/api/webhook', (req, res) => {
 ```
 or
 ```typescript
-import {FacebookMessagingAPIClient, ValidateWebhook, FacebookMessageParser} from 'fb-messenger-bot-api';
+import {FacebookMessagingAPIClient, ValidateWebhook, FacebookMessageParser} from 'fb-messenger-bot-api2';
 import {Router} from 'express';
 ...
 router.get('/api/webhook',facebook.ValidateWebhook.validateServer);

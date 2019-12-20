@@ -5,6 +5,8 @@ import { ATTACHMENT_TYPE } from '../enums';
 export interface ClientMessage {
   message?: MessagePayload;
   sender_action?: string;
+  messaging_type?: string;
+  tag?: string;
 }
 
 export interface AttachmentPayload {
@@ -16,6 +18,11 @@ export interface MessagePayload {
   text?: string;
   quick_replies?: IQuickReply[];
   attachment?: AttachmentPayload;
+}
+
+export interface MessageTag {
+  messaging_type: string;
+  tag: string;
 }
 
 /**
@@ -84,8 +91,8 @@ export class FacebookMessagingAPIClient {
      * @param {Function} cb
      * @return {Promise<any>}
      */
-  public sendTextMessage(id: string, text: string, cb?: Function) {
-    return this.sendDisplayMessage(id, { text }, cb);
+  public sendTextMessage(id: string, text: string, tag?: MessageTag, cb?: Function) {
+    return this.sendDisplayMessage(id, { text }, tag, cb);
   }
 
     /**
@@ -96,8 +103,8 @@ export class FacebookMessagingAPIClient {
      * @param {Function} cb
      * @return {Promise<any>}
      */
-  public sendImageMessage(id: string, imageUrlOrId: string, cb?: Function) {
-    return this.sendUrlOrIdBasedMessage(id, ATTACHMENT_TYPE.IMAGE, imageUrlOrId, cb);
+  public sendImageMessage(id: string, imageUrlOrId: string, tag?: MessageTag, cb?: Function) {
+    return this.sendUrlOrIdBasedMessage(id, ATTACHMENT_TYPE.IMAGE, imageUrlOrId, tag, cb);
   }
 
     /**
@@ -108,8 +115,8 @@ export class FacebookMessagingAPIClient {
      * @param {Function} cb
      * @return {Promise<any>}
      */
-  public sendAudioMessage(id: string, audioUrlOrId: string, cb?: Function) {
-    return this.sendUrlOrIdBasedMessage(id, ATTACHMENT_TYPE.AUDIO, audioUrlOrId, cb);
+  public sendAudioMessage(id: string, audioUrlOrId: string, tag?: MessageTag, cb?: Function) {
+    return this.sendUrlOrIdBasedMessage(id, ATTACHMENT_TYPE.AUDIO, audioUrlOrId, tag, cb);
   }
 
     /**
@@ -120,8 +127,8 @@ export class FacebookMessagingAPIClient {
      * @param {Function} cb
      * @return {Promise<any>}
      */
-  public sendVideoMessage(id: string, videoUrlOrId: string, cb?: Function) {
-    return this.sendUrlOrIdBasedMessage(id, ATTACHMENT_TYPE.VIDEO, videoUrlOrId, cb);
+  public sendVideoMessage(id: string, videoUrlOrId: string, tag?: MessageTag, cb?: Function) {
+    return this.sendUrlOrIdBasedMessage(id, ATTACHMENT_TYPE.VIDEO, videoUrlOrId, tag, cb);
   }
 
     /**
@@ -132,8 +139,8 @@ export class FacebookMessagingAPIClient {
      * @param {Function} cb
      * @return {Promise<any>}
      */
-  public sendFileMessage(id: string, fileUrlOrId: string, cb?: Function) {
-    return this.sendUrlOrIdBasedMessage(id, ATTACHMENT_TYPE.FILE, fileUrlOrId, cb);
+  public sendFileMessage(id: string, fileUrlOrId: string, tag?: MessageTag, cb?: Function) {
+    return this.sendUrlOrIdBasedMessage(id, ATTACHMENT_TYPE.FILE, fileUrlOrId, tag, cb);
   }
 
     /**
@@ -145,9 +152,9 @@ export class FacebookMessagingAPIClient {
      * @param {Function} cb
      * @return {Promise<any>}
      */
-  public sendButtonsMessage(id:string, text: string, buttons: IButton[], cb?: Function) {
+  public sendButtonsMessage(id:string, text: string, buttons: IButton[], tag?: MessageTag, cb?: Function) {
     const payload = { type: ATTACHMENT_TYPE.TEMPLATE, payload: { text, buttons, template_type: 'button' } };
-    return this.sendAttachmentMessage(id, payload, cb);
+    return this.sendAttachmentMessage(id, payload, tag, cb);
   }
 
     /**
@@ -158,9 +165,9 @@ export class FacebookMessagingAPIClient {
      * @param {Function} cb
      * @return {Promise<any>}
      */
-  public sendTemplateMessage(id: string, templatePayload: IMessageTemplate, cb?: Function) {
+  public sendTemplateMessage(id: string, templatePayload: IMessageTemplate, tag?: MessageTag, cb?: Function) {
     const payload = { type: ATTACHMENT_TYPE.TEMPLATE, payload: templatePayload };
-    return this.sendAttachmentMessage(id, payload, cb);
+    return this.sendAttachmentMessage(id, payload, tag, cb);
   }
 
     /**
@@ -172,14 +179,14 @@ export class FacebookMessagingAPIClient {
      * @param {Function} cb
      * @return {Promise<any>}
      */
-  public sendQuickReplyMessage(id: string, textOrAttachment: string|AttachmentPayload, quickReplies: IQuickReply[], cb?: Function) {
+  public sendQuickReplyMessage(id: string, textOrAttachment: string|AttachmentPayload, quickReplies: IQuickReply[], tag?: MessageTag, cb?: Function) {
     let payload;
     if (typeof textOrAttachment === 'string') {
       payload = { text: textOrAttachment, quick_replies: quickReplies };
     } else {
       payload = { attachment: textOrAttachment, quick_replies: quickReplies };
     }
-    return this.sendDisplayMessage(id, payload, cb);
+    return this.sendDisplayMessage(id, payload, tag, cb);
   }
 
     /**
@@ -205,23 +212,26 @@ export class FacebookMessagingAPIClient {
     return Utils.sendMessage(options, this.requestData, cb);
   }
 
-  private sendUrlOrIdBasedMessage(id: string, type: ATTACHMENT_TYPE, urlOrId: string, cb?: Function) {
+  private sendUrlOrIdBasedMessage(id: string, type: ATTACHMENT_TYPE, urlOrId: string, tag?: MessageTag, cb?: Function) {
     let payload;
     if (urlOrId.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
       payload = { type, payload: { is_reusable: true, url: urlOrId } };
     } else {
       payload = { type, payload: { attachment_id: urlOrId } };
     }
-    return this.sendAttachmentMessage(id, payload, cb);
+    return this.sendAttachmentMessage(id, payload, tag, cb);
   }
 
-  private sendAttachmentMessage(id: string, payload: AttachmentPayload, cb?: Function) {
-    return this.sendDisplayMessage(id, { attachment: payload }, cb);
+  private sendAttachmentMessage(id: string, payload: AttachmentPayload, tag?: MessageTag, cb?: Function) {
+    return this.sendDisplayMessage(id, { attachment: payload }, tag, cb);
   }
 
-  private sendDisplayMessage(id: string, payload: MessagePayload, cb?: Function) {
+  private sendDisplayMessage(id: string, payload: MessagePayload, tag?: MessageTag, cb?: Function) {
     const options = this.generateBasicRequestPayload(id);
     options.json = { ...options.json, message:payload };
+    if (tag) {
+      options.json = { ...options.json, messaging_type:tag.messaging_type, tag:tag.tag };
+    }
     return Utils.sendMessage(options, this.requestData, cb);
   }
 

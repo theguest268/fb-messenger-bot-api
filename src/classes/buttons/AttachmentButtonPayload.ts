@@ -1,5 +1,5 @@
 import { ATTACHMENT_TYPE } from '../../enums';
-import { AttachmentPayload } from '../../client/Client';
+import { AttachmentPayload } from '../../client/FacebookMessagingAPIClient';
 import { AttachmentButtonBuilder } from '../../builders/buttons';
 
 export class AttachmentButtonPayload implements AttachmentPayload{

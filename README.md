@@ -1,4 +1,4 @@
-# fb-messenger-bot-api2
+# fb-messenger-bot-api
 #### NodeJS Facebook Messenger API
 [![version](https://img.shields.io/npm/v/fb-messenger-bot-api.svg)](http://npm.im/fb-messenger-bot-api2)
 [![travis build](https://img.shields.io/travis/crisboarna/fb-messenger-bot-api.svg)](https://travis-ci.org/crisboarna/fb-messenger-bot-api)
@@ -49,7 +49,7 @@ npm install fb-messenger-bot-api2
 * [Creating Facebook App](#creating-facebook-app)
 
 ## Documentation
-You can find documentation [here](https://github.com/theguest268/fb-messenger-bot-api2)
+You can find documentation [here](https://github.com/theguest268/fb-messenger-bot-api)
 
 ## Features
 * Near complete Typescript types for all incoming/outgoing Facebook Messaging API payloads & webhooks
